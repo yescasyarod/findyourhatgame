@@ -1,4 +1,5 @@
 import { createInterface } from 'readline';
+import { arrayBuffer } from 'stream/consumers';
 
 const rl = createInterface({
     input: process.stdin,
@@ -9,6 +10,46 @@ const hat = "^";
 const hole = "O";
 const fieldCharacter = "░";
 const pathCharacter = "*";
+
+const generateField = (height, width, percentageHoles) => {
+    let generatedField = new Array(height);
+    for (let i = 0; i < height; i++) {
+        generatedField[i] = new Array(width);
+        generatedField[i].fill(fieldCharacter);
+    };
+    //Creating the start path
+    generatedField[0][0] = pathCharacter;
+    //Creating the hat
+    let randomX = 0;
+    let randomY = 0;
+    let helper = 1;
+    let position;
+    for (let i = 0; i < helper; i++) {
+        randomX = Math.floor(Math.random() * width);
+        randomY = Math.floor(Math.random() * height);
+        if (position === pathCharacter) {
+            helper +=1;
+            continue;
+        } else {
+            generatedField[randomY][randomX] = hat;
+        }
+    }
+    //Placing random holes
+    let totalElements = (height * width) - 2;
+    let totalHoles = totalElements * percentageHoles / 100;
+    for (let i = 0; i < totalHoles; i++) {
+        randomX = Math.floor(Math.random() * width);
+        randomY = Math.floor(Math.random() * height);
+        position = generatedField[randomY][randomX];
+        if (position === pathCharacter || position === hat) {
+            totalHoles += 1;
+            continue;
+        } else {
+            generatedField[randomY][randomX] = hole;
+        };
+    };
+    return generatedField;
+};
 
 class Field {
     constructor(fieldArray) {
@@ -114,10 +155,15 @@ class Field {
     }
 };
 
-const myField = new Field([
+//Initial functionality
+/*const myField = new Field([
     ['*', '░', 'O'],
     ['░', 'O', '░'],
     ['░', '^', '░'],
 ]);
+myField.play();*/
 
+let random1 = Math.floor(Math.random() * (8 - 4) + 4);
+let random2 = Math.floor(Math.random() * (8 - 4) + 4);
+const myField = new Field(generateField(random1, random2, 50));
 myField.play();
