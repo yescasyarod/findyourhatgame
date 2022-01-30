@@ -28,13 +28,11 @@ class Field {
 
         let x = this.x;
         let y = this.y;
-        let movementX;
-        let movementY;
-        let length;
+        let len;
 
-        const movementLogic = (movementX, movementY, length) => {
-            let position = this.fieldArray[movementY][movementX];
-            if (movementX < 0 || movementX > length || movementY < 0 || movementY > length) { 
+        const movementLogic = (x, y, len) => {
+            let position = this.fieldArray[y][x];
+            if (x < 0 || x > len || y < 0 || y > len) { 
                 console.log("You're outbounds\n");
                 this.state = 'lose';
             } else {
@@ -45,7 +43,7 @@ class Field {
                     console.log("You found your hat!\n");
                     this.state = 'win';
                 } else {
-                    this.fieldArray[movementY][movementX] = pathCharacter;
+                    this.fieldArray[y][x] = pathCharacter;
                     this.print();
                 };
             };
@@ -54,42 +52,34 @@ class Field {
         switch (direction) {
 
             case 'u' || 'U':
-                
-                movementX = x
-                movementY = y-1
-                length = this.fieldArray.length;
-                movementLogic(movementX, movementY, length);
+
                 this.y -= 1;
+                len = this.fieldArray.length;
+                movementLogic(x, this.y, len);
                 
                 break;
 
             case 'd' || 'D':
                 
-                movementX = x
-                movementY = y+1
-                length = this.fieldArray.length;
-                movementLogic(movementX, movementY, length);
                 this.y += 1;
+                len = this.fieldArray.length;
+                movementLogic(x, this.y, len);
                 
                 break;
 
             case 'l' || 'L':
 
-                movementX = x-1
-                movementY = y
-                length = this.fieldArray[y].length;
-                movementLogic(movementX, movementY, length);
                 this.x -= 1;
+                len = this.fieldArray[y].length;
+                movementLogic(this.x, y, len);
                 
                 break;
 
             case 'r' || 'R':
-
-                movementX = x+1
-                movementY = y
-                length = this.fieldArray[y].length;
-                movementLogic(movementX, movementY, length);
+                
                 this.x += 1;
+                len = this.fieldArray[y].length;
+                movementLogic(this.x, y, len);
                 
                 break;
 
